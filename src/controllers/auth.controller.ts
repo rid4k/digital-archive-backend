@@ -107,7 +107,7 @@ const auth = {
       const token = helpers.createJWT(tcNumber);
 
       res.cookie("jwt", token, {
-        httpOnly: false,
+        httpOnly: true,
         sameSite: "strict",
         secure: false,
         maxAge: 1 * 60 * 60 * 1000, // 1h
