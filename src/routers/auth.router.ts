@@ -4,6 +4,5 @@ import { isAuthenticatedAdmin } from "../middlewares/admin.middleware";
 
 export default (router: express.Router) => {
   router.post("/auth/create-user", isAuthenticatedAdmin, auth.createUser);
-  router.post("/auth/create-admin", isAuthenticatedAdmin, auth.createAdmin);
   router.post("/auth/login", auth.login);
 };

@@ -18,13 +18,14 @@ export const isAuthenticatedUser = async (
 
     const decoded = jwt.verify(token, serverData.jwtSecret) as {
       tcNumber: number;
+      userType: string;
     };
 
-    const { tcNumber } = decoded;
+    const { tcNumber, userType } = decoded;
 
     const existingUser = await userServices.getUserByTcNumber(tcNumber);
 
-    if (!existingUser) {
+    if (!existingUser || (userType !== "user" && userType != "admin")) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }

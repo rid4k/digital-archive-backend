@@ -5,9 +5,9 @@ import helpers from "../helpers/helper";
 const auth = {
   createUser: async (req: express.Request, res: express.Response) => {
     try {
-      const { name, surname, tcNumber, password } = req.body;
+      const { name, surname, tcNumber, password, userType } = req.body;
 
-      if (!name || !surname || !tcNumber || !password) {
+      if (!name || !surname || !tcNumber || !password || !userType) {
         res.status(400).json({ message: "Credentials are missing" });
         return;
       }
@@ -25,43 +25,7 @@ const auth = {
         name,
         surname,
         tcNumber,
-        authentication: {
-          salt,
-          password: helpers.encryptPassword(salt, password),
-        },
-      });
-
-      res.status(200).json(user);
-    } catch (error) {
-      console.log(error);
-      res.sendStatus(400);
-      return;
-    }
-  },
-
-  createAdmin: async (req: express.Request, res: express.Response) => {
-    try {
-      const { name, surname, tcNumber, password } = req.body;
-
-      if (!name || !surname || !tcNumber || !password) {
-        res.status(400).json({ message: "Credentials are missing" });
-        return;
-      }
-
-      const existingUser = await userServices.getUserByTcNumber(tcNumber);
-
-      if (existingUser) {
-        res.status(400).json({ message: "User already exists" });
-        return;
-      }
-
-      const salt = helpers.random();
-
-      const user = await userServices.createUser({
-        name,
-        surname,
-        tcNumber,
-        userType: "admin",
+        userType,
         authentication: {
           salt,
           password: helpers.encryptPassword(salt, password),
@@ -104,7 +68,7 @@ const auth = {
         return;
       }
 
-      const token = helpers.createJWT(tcNumber);
+      const token = helpers.createJWT(tcNumber, user.userType);
 
       res.cookie("jwt", token, {
         httpOnly: true,

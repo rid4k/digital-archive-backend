@@ -12,8 +12,8 @@ const helpers = {
       .digest("hex");
   },
 
-  createJWT: (tcNumber: number) => {
-    const token = jwt.sign({ tcNumber }, serverData.jwtSecret, {
+  createJWT: (tcNumber: number, userType: string) => {
+    const token = jwt.sign({ tcNumber, userType }, serverData.jwtSecret, {
       expiresIn: "1h",
     });
 
