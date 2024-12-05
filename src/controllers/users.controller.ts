@@ -50,7 +50,7 @@ const users = {
     try {
       const { userId, name, surname, tcNumber, password } = req.body;
 
-      if (!userId || !name || !surname || !tcNumber || !password) {
+      if (!userId || !name || !surname || !tcNumber) {
         res.status(400).json({ message: "Credentials are missing" });
         return;
       }
@@ -62,17 +62,22 @@ const users = {
         return;
       }
 
-      const salt = helpers.random();
-
-      const user = await userServices.updateUserById(userId, {
+      const updateData: Record<string, any> = {
         name,
         surname,
         tcNumber,
-        authentication: {
+      };
+
+      // Conditionally add the authentication field if password is provided
+      if (password) {
+        const salt = helpers.random(); // Assuming helpers.random() generates a salt
+        updateData.authentication = {
           salt,
-          password: helpers.encryptPassword(salt, password),
-        },
-      });
+          password: helpers.encryptPassword(salt, password), // Encrypt password with salt
+        };
+      }
+
+      const user = await userServices.updateUserById(userId, updateData);
 
       res.status(200).json(user);
     } catch (error) {
