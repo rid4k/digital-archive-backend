@@ -10,7 +10,12 @@ import routes from "./routers/routes";
 
 const app = express();
 
-app.use(cors({ origin: [serverData.adminFrontendUrl], credentials: true }));
+app.use(
+  cors({
+    origin: [serverData.adminFrontendUrl, serverData.userFrontendUrl],
+    credentials: true,
+  })
+);
 
 app.use(compression());
 app.use(cookieParser());

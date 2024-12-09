@@ -8,6 +8,7 @@ const serverData = {
   cryptoSecret: process.env.CRYPTO_SECRET,
   jwtSecret: process.env.JWT_SECRET,
   adminFrontendUrl: process.env.ADMIN_FRONTEND_URL,
+  userFrontendUrl: process.env.USER_FRONTEND_URL,
 };
 
 export default serverData;
