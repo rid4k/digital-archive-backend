@@ -23,28 +23,19 @@ export interface CaseInterface {
 
 const CaseSchema = new mongoose.Schema(
   {
-    applicationId: { type: Number, required: true },
-    lppName: { type: String },
-    lppSurname: { type: String },
-    lppTc: { type: Number },
+    applicationId: { type: String, required: true },
+    lppName: { type: String, default: "" },
+    lppSurname: { type: String, default: "" },
+    lppTc: { type: Number, default: 0 },
     lawyerId: { type: String, required: true },
-    caseSubject: { type: String },
-    caseNumber: { type: Number },
-    courtName: { type: String },
-    indictment: { type: String },
-    files: [
-      {
-        fileKey: { type: String },
-        description: { type: String },
-      },
-    ],
-    resources: [
-      {
-        url: { type: String },
-      },
-    ],
-    result: { type: String },
-    resultPhase: { type: String },
+    caseSubject: { type: String, default: "" },
+    caseNumber: { type: Number, default: 0 },
+    courtName: { type: String, default: "" },
+    indictment: { type: String, default: "" },
+    files: { type: [{ fileKey: String, description: String }], default: [] },
+    resources: { type: [{ url: String }], default: [] },
+    result: { type: String, default: "" },
+    resultPhase: { type: String, default: "" },
   },
   {
     timestamps: true,

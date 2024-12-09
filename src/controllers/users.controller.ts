@@ -3,9 +3,9 @@ import userServices from "../services/users.services";
 import helpers from "../helpers/helper";
 
 const users = {
-  getUsers: async (req: express.Request, res: express.Response) => {
+  getLawyers: async (req: express.Request, res: express.Response) => {
     try {
-      const users = await userServices.getUsers();
+      const users = await userServices.getLawyers();
 
       res.status(200).json(users);
     } catch (error) {

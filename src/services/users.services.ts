@@ -1,7 +1,7 @@
 import { UserModel } from "../models/users.model";
 
 const userServices = {
-  getUsers: () => UserModel.find({ userType: "user" }),
+  getLawyers: () => UserModel.find({ userType: "lawyer" }),
 
   getAdmins: () => UserModel.find({ userType: "admin" }),
 

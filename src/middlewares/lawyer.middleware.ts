@@ -25,7 +25,7 @@ export const isAuthenticatedUser = async (
 
     const existingUser = await userServices.getUserByTcNumber(tcNumber);
 
-    if (!existingUser || (userType !== "user" && userType != "admin")) {
+    if (!existingUser || (userType !== "lawyer" && userType != "admin")) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }

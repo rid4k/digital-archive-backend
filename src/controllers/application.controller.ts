@@ -17,7 +17,7 @@ const application = {
         !applicationData.applicationReason ||
         !applicationData.applicationType
       ) {
-        res.status(400).json({ message: "Credentials are missing" });
+        res.status(400).json({ message: "Required data not found" });
         return;
       }
 
@@ -127,7 +127,7 @@ const application = {
       const { applicationId } = req.body;
 
       if (!applicationId) {
-        res.status(400).json({ message: "Credentials are missing" });
+        res.status(400).json({ message: "Required data not found" });
         return;
       }
 
@@ -153,7 +153,7 @@ const application = {
       const { applicationId } = req.body;
 
       if (!applicationId) {
-        res.status(400).json({ message: "Credentials are missing" });
+        res.status(400).json({ message: "Required data not found" });
         return;
       }
 
@@ -194,7 +194,7 @@ const application = {
         !applicationData.applicationReason ||
         !applicationData.applicationType
       ) {
-        res.status(400).json({ message: "Credentials are missing" });
+        res.status(400).json({ message: "Required data not found" });
         return;
       }
 

@@ -3,11 +3,7 @@ import application from "../controllers/application.controller";
 import { isAuthenticatedAdmin } from "../middlewares/admin.middleware";
 
 export default (router: express.Router) => {
-  router.post(
-    "/applications/create",
-    isAuthenticatedAdmin,
-    application.createApplication
-  );
+  router.post("/applications/create", application.createApplication);
   router.get(
     "/applications/get-applications",
     isAuthenticatedAdmin,
