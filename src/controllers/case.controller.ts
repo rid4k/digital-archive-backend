@@ -150,6 +150,40 @@ const cases = {
       return;
     }
   },
+
+  getCasesByLawyerId: async (req: express.Request, res: express.Response) => {
+    try {
+      const token = req.cookies["jwt"];
+
+      if (!token) {
+        res.status(403).json({ message: "No token provided for cases" });
+        return;
+      }
+
+      const lawyer = await caseServices.getLawyerIdFromToken(token);
+
+      if (!lawyer) {
+        res.status(404).json({ error: "Lawyer not found" });
+        return;
+      }
+
+      const lawyerId = lawyer.id;
+
+      if (!lawyerId) {
+        res.status(400).json({ error: "Required data not found" });
+        return;
+      }
+
+      const enrichedCases =
+        await caseServices.getCasesAndApplicationsByLawyerId(lawyerId);
+
+      res.status(200).json(enrichedCases);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+      return;
+    }
+  },
 };
 
 export default cases;
