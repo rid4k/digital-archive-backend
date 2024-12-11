@@ -153,14 +153,9 @@ const cases = {
 
   getCasesByLawyerId: async (req: express.Request, res: express.Response) => {
     try {
-      const token = req.cookies["jwt"];
+      const user = req.body.user;
 
-      if (!token) {
-        res.status(403).json({ message: "No token provided for cases" });
-        return;
-      }
-
-      const lawyer = await caseServices.getLawyerIdFromToken(token);
+      const lawyer = await userServices.getUserByTcNumber(user.tcNumber);
 
       if (!lawyer) {
         res.status(404).json({ error: "Lawyer not found" });

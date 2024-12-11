@@ -38,18 +38,6 @@ const caseServices = {
 
     return enrichedCases;
   },
-
-  getLawyerIdFromToken: (token: string) => {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      tcNumber: number;
-    };
-
-    const { tcNumber } = decoded;
-
-    const lawyer = userServices.getUserByTcNumber(tcNumber);
-
-    return lawyer;
-  },
 };
 
 export default caseServices;
