@@ -130,9 +130,22 @@ const cases = {
     try {
       const { caseId } = req.body;
       const caseData: CaseInterface = req.body;
+      const user = req.body.user;
 
       if (!caseId || !caseData) {
         res.status(400).json({ error: "Required data not found" });
+        return;
+      }
+
+      const aCase = await caseServices.getCaseById(caseId);
+
+      if (!aCase) {
+        res.status(404).json({ error: "Case not found" });
+        return;
+      }
+
+      if (aCase.lawyerId != user.userId) {
+        res.status(401).json({ error: "Unauthorized to update case" });
         return;
       }
 
@@ -155,22 +168,13 @@ const cases = {
     try {
       const user = req.body.user;
 
-      const lawyer = await userServices.getUserByTcNumber(user.tcNumber);
-
-      if (!lawyer) {
-        res.status(404).json({ error: "Lawyer not found" });
-        return;
-      }
-
-      const lawyerId = lawyer.id;
-
-      if (!lawyerId) {
-        res.status(400).json({ error: "Required data not found" });
-        return;
-      }
-
       const enrichedCases =
-        await caseServices.getCasesAndApplicationsByLawyerId(lawyerId);
+        await caseServices.getCasesAndApplicationsByLawyerId(user.userId);
+
+      if (!enrichedCases) {
+        res.status(404).json({ error: "No cases found" });
+        return;
+      }
 
       res.status(200).json(enrichedCases);
     } catch (error) {

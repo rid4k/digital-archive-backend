@@ -12,7 +12,7 @@ export default (router: express.Router) => {
     isAuthenticatedAdmin,
     cases.deleteCaseById
   );
-  router.put("/cases/update-case", isAuthenticatedAdmin, cases.updateCaseById);
+  router.put("/cases/update-case", isAuthenticatedUser, cases.updateCaseById);
   router.get(
     "/cases/get-cases-by-lawyer-id",
     isAuthenticatedUser,

@@ -31,6 +31,7 @@ export const isAuthenticatedUser = async (
     }
 
     req.body.user = {
+      userId: existingUser._id,
       tcNumber: existingUser.tcNumber,
       userType: existingUser.userType,
     };
