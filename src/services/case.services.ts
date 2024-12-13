@@ -21,14 +21,12 @@ const caseServices = {
   getCasesAndApplicationsByLawyerId: async (lawyerId: string) => {
     const cases = await caseServices.getCasesByLawyerId(lawyerId).lean();
 
-    // Use Promise.all to wait for all applications to be fetched
     const enrichedCases = await Promise.all(
       cases.map(async (aCase) => {
         const application = await applicationServices.getApplicationById(
           aCase.applicationId
         );
 
-        // Add the application to the case
         return {
           ...aCase,
           application,
