@@ -12,7 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [serverData.adminFrontendUrl, serverData.userFrontendUrl],
+    origin: serverData.allowedOrigins,
     credentials: true,
   })
 );

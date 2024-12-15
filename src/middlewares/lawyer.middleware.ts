@@ -12,7 +12,7 @@ export const isAuthenticatedUser = async (
     const token = req.cookies["jwt"];
 
     if (!token) {
-      res.status(403).json({ message: "No token provided" });
+      res.status(401).json({ message: "No token provided" });
       return;
     }
 
@@ -39,7 +39,7 @@ export const isAuthenticatedUser = async (
     next();
   } catch (error) {
     console.log(error);
-    res.sendStatus(400);
+    res.sendStatus(401);
     return;
   }
 };

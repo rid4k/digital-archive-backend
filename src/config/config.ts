@@ -7,8 +7,11 @@ const serverData = {
   mongoUrl: process.env.MONGO_URL,
   cryptoSecret: process.env.CRYPTO_SECRET,
   jwtSecret: process.env.JWT_SECRET,
-  adminFrontendUrl: process.env.ADMIN_FRONTEND_URL,
-  userFrontendUrl: process.env.USER_FRONTEND_URL,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  allowedOrigins: [
+    process.env.ADMIN_FRONTEND_URL,
+    process.env.USER_FRONTEND_URL,
+  ],
 };
 
 export default serverData;

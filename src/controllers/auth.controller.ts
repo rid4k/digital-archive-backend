@@ -1,6 +1,8 @@
 import express from "express";
 import userServices from "../services/users.services";
 import helpers from "../helpers/helper";
+import serverData from "../config/config";
+import jwt from "jsonwebtoken";
 
 const auth = {
   createUser: async (req: express.Request, res: express.Response) => {
@@ -69,6 +71,7 @@ const auth = {
       }
 
       const token = helpers.createJWT(tcNumber, user.userType);
+      const refreshToken = helpers.createRefreshToken(tcNumber, user.userType);
 
       res.cookie("jwt", token, {
         httpOnly: true,
@@ -77,7 +80,88 @@ const auth = {
         maxAge: 1 * 60 * 60 * 1000, // 1h
       });
 
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000, // 24h
+      });
+
       res.status(200).json({ message: "Login successful" });
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+      return;
+    }
+  },
+
+  logout: async (req: express.Request, res: express.Response) => {
+    try {
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: false,
+      });
+
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: false,
+      });
+      res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+      return;
+    }
+  },
+
+  handleRefreshToken: async (req: express.Request, res: express.Response) => {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        res.status(403).json({ message: "No refresh token" });
+        return;
+      }
+
+      const decoded = jwt.verify(
+        refreshToken,
+        serverData.refreshTokenSecret
+      ) as {
+        tcNumber: number;
+        userType: string;
+      };
+
+      if (!decoded) {
+        res.status(403).json({ message: "Invalid refresh token" });
+        return;
+      }
+
+      const { tcNumber, userType } = decoded;
+
+      if (!tcNumber || !userType) {
+        res.status(403).json({ message: "Invalid refresh token" });
+        return;
+      }
+
+      const user = await userServices.getUserByTcNumber(tcNumber);
+
+      if (!user) {
+        res.status(403).json({ message: "Invalid refresh token" });
+        return;
+      }
+
+      const token = helpers.createJWT(user.tcNumber, user.userType);
+
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: false,
+        maxAge: 1 * 60 * 60 * 1000, // 1h
+      });
+
+      res.status(200).json({ message: "Token refreshed" });
     } catch (error) {
       console.log(error);
       res.sendStatus(400);

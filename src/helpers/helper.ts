@@ -19,6 +19,18 @@ const helpers = {
 
     return token;
   },
+
+  createRefreshToken: (tcNumber: number, userType: string) => {
+    const token = jwt.sign(
+      { tcNumber, userType },
+      serverData.refreshTokenSecret,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    return token;
+  },
 };
 
 export default helpers;
