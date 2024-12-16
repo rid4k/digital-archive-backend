@@ -12,6 +12,10 @@ const serverData = {
     process.env.ADMIN_FRONTEND_URL,
     process.env.USER_FRONTEND_URL,
   ],
+  accessKey: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  bucketRegion: process.env.AWS_REGION,
+  bucketName: process.env.S3_BUCKET_NAME,
 };
 
 export default serverData;

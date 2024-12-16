@@ -1,9 +1,19 @@
 import express from "express";
 import application from "../controllers/application.controller";
 import { isAuthenticatedAdmin } from "../middlewares/admin.middleware";
+import { uploadFilesMiddleware } from "../middlewares/uploadMiddleware";
+import multer from "multer";
+import serverData from "../config/config";
+
+const upload = multer(); // Use memory storage
 
 export default (router: express.Router) => {
-  router.post("/applications/create", application.createApplication);
+  router.post(
+    "/applications/create",
+    upload.array("files", 5),
+    uploadFilesMiddleware(serverData.bucketName || ""),
+    application.createApplication
+  );
   router.get(
     "/applications/get-applications",
     isAuthenticatedAdmin,
