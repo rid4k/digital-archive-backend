@@ -34,7 +34,7 @@ export const uploadFilesMiddleware =
       const files = req.files as Express.Multer.File[];
 
       if (!files || files.length === 0) {
-        res.status(400).json({ message: "No files uploaded" });
+        return next();
       }
 
       const uploadedFiles = await Promise.all(

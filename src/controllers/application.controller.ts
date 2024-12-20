@@ -21,21 +21,23 @@ const application = {
         return;
       }
 
-      const uploadedFiles = req.body.uploadedFiles || [];
+      if (req.body.uploadedFiles) {
+        const uploadedFiles = req.body.uploadedFiles || [];
 
-      applicationData.files = uploadedFiles.map(
-        (fileKey: any, index: number) => {
-          const userDescription =
-            applicationData.files && applicationData.files[index]
-              ? applicationData.files[index].description
-              : "";
+        applicationData.files = uploadedFiles.map(
+          (fileKey: any, index: number) => {
+            const userDescription =
+              applicationData.files && applicationData.files[index]
+                ? applicationData.files[index].description
+                : "";
 
-          return {
-            fileKey: fileKey,
-            description: userDescription || "No description provided",
-          };
-        }
-      );
+            return {
+              fileKey: fileKey,
+              description: userDescription || "No description provided",
+            };
+          }
+        );
+      }
 
       const application = await applicationServices.createApplication(
         applicationData

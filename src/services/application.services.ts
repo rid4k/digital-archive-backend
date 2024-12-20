@@ -1,4 +1,3 @@
-import { get } from "mongoose";
 import { ApplicationModel } from "../models/application.model";
 
 const applicationServices = {
