@@ -67,4 +67,10 @@ export default (router: express.Router) => {
     isAuthenticatedAdmin,
     application.updateApplication
   );
+
+  router.put(
+    "/applications/update-application-status",
+    isAuthenticatedAdmin,
+    application.updateApplicationStatus
+  );
 };

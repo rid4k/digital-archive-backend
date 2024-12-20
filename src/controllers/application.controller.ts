@@ -233,6 +233,42 @@ const application = {
       return;
     }
   },
+
+  updateApplicationStatus: async (
+    req: express.Request,
+    res: express.Response
+  ) => {
+    try {
+      const { applicationId, status } = req.body;
+
+      if (!applicationId || !status) {
+        res.status(400).json({ message: "Required data not found" });
+        return;
+      }
+
+      if (status != "pending" && status != "approved" && status != "rejected") {
+        res.status(400).json({ message: "Status data is not allowed" });
+        return;
+      }
+
+      const updatedApplication =
+        await applicationServices.updateApplicationStatus(
+          applicationId,
+          status
+        );
+
+      if (!updatedApplication) {
+        res.status(400).json({ message: "Application not found" });
+        return;
+      }
+
+      res.status(200).json(updatedApplication);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(400);
+      return;
+    }
+  },
 };
 
 export default application;

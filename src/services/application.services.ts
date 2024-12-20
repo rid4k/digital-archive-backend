@@ -27,6 +27,9 @@ const applicationServices = {
 
   updateApplicationById: (id: string, values: Record<string, any>) =>
     ApplicationModel.findByIdAndUpdate(id, values),
+
+  updateApplicationStatus: (id: string, status: string) =>
+    ApplicationModel.findByIdAndUpdate(id, { status: status }, { new: true }),
 };
 
 export default applicationServices;
