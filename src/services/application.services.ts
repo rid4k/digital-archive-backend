@@ -26,7 +26,7 @@ const applicationServices = {
     ApplicationModel.findOneAndDelete({ _id: id }),
 
   updateApplicationById: (id: string, values: Record<string, any>) =>
-    ApplicationModel.findByIdAndUpdate(id, values),
+    ApplicationModel.findByIdAndUpdate(id, values, { new: true }),
 
   updateApplicationStatus: (id: string, status: string) =>
     ApplicationModel.findByIdAndUpdate(id, { status: status }, { new: true }),
