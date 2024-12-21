@@ -12,7 +12,7 @@ const categoriesService = {
     CategoriesModel.findOneAndDelete({ _id: id }),
 
   updateCategoryById: (id: string, values: Record<string, any>) =>
-    CategoriesModel.findByIdAndUpdate(id, values),
+    CategoriesModel.findByIdAndUpdate(id, values, { new: true }),
 };
 
 export default categoriesService;

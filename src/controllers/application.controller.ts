@@ -1,6 +1,7 @@
 import express from "express";
 import applicationServices from "../services/application.services";
 import { ApplicationInterface } from "../models/application.model";
+import helpers from "../helpers/helper";
 
 const application = {
   createApplication: async (req: express.Request, res: express.Response) => {
@@ -55,7 +56,35 @@ const application = {
     try {
       const applications = await applicationServices.getApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -70,7 +99,35 @@ const application = {
     try {
       const applications = await applicationServices.getPendingApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -85,7 +142,35 @@ const application = {
     try {
       const applications = await applicationServices.getApprovedApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -100,7 +185,35 @@ const application = {
     try {
       const applications = await applicationServices.getRejectedApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -116,7 +229,35 @@ const application = {
       const applications =
         await applicationServices.getIndividualApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -132,7 +273,35 @@ const application = {
       const applications =
         await applicationServices.getInstitutionalApplications();
 
-      res.status(200).json(applications);
+      if (!applications) {
+        res.status(400).json({ message: "Application data not found" });
+        return;
+      }
+
+      const signedApplications = await Promise.all(
+        applications.map(async (application) => {
+          const filesWithSignedUrls = Array.isArray(application.files)
+            ? await Promise.all(
+                application.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedApplications);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);

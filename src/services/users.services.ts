@@ -15,7 +15,7 @@ const userServices = {
   deleteUserById: (id: string) => UserModel.findOneAndDelete({ _id: id }),
 
   updateUserById: (id: string, values: Record<string, any>) =>
-    UserModel.findByIdAndUpdate(id, values),
+    UserModel.findByIdAndUpdate(id, values, { new: true }),
 };
 
 export default userServices;

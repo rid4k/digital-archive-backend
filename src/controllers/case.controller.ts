@@ -3,13 +3,37 @@ import caseServices from "../services/case.services";
 import applicationServices from "../services/application.services";
 import userServices from "../services/users.services";
 import { CaseInterface } from "../models/case.model";
+import helpers from "../helpers/helper";
 
 const cases = {
   getCases: async (req: express.Request, res: express.Response) => {
     try {
       const cases = await caseServices.getCases();
 
-      res.status(200).json(cases);
+      const signedCases = await Promise.all(
+        cases.map(async (aCase) => {
+          const filesWithSignedUrls = Array.isArray(aCase.files)
+            ? await Promise.all(
+                aCase.files.map(async (file) => ({
+                  _id: file._id,
+                  fileKey: file.fileKey,
+                  description: file.description,
+                  signedUrl: file.fileKey
+                    ? await helpers.generateSignedUrl(file.fileKey)
+                    : "",
+                }))
+              )
+            : [];
+
+          // Güncellenmiş files'ı application nesnesine ekleyin
+          return {
+            ...aCase.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+            files: filesWithSignedUrls, // Sadece dosyaları güncelle
+          };
+        })
+      );
+
+      res.status(200).json(signedCases);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -33,7 +57,23 @@ const cases = {
         return;
       }
 
-      res.status(200).json(aCase);
+      const filesWithSignedUrls = await Promise.all(
+        aCase.files.map(async (file) => ({
+          _id: file._id,
+          fileKey: file.fileKey,
+          description: file.description,
+          signedUrl: file.fileKey
+            ? await helpers.generateSignedUrl(file.fileKey)
+            : "",
+        }))
+      );
+
+      const signedCase = {
+        ...aCase.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+        files: filesWithSignedUrls, // Güncellenmiş dosyalar
+      };
+
+      res.status(200).json(signedCase);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
@@ -144,9 +184,27 @@ const cases = {
         return;
       }
 
-      if (aCase.lawyerId != user.userId) {
+      console.log(user);
+      if (aCase.lawyerId != user.userId && user.userType != "admin") {
         res.status(401).json({ error: "Unauthorized to update case" });
         return;
+      }
+
+      if (req.body.uploadedFiles) {
+        ("");
+        const uploadedFiles = req.body.uploadedFiles || [];
+
+        caseData.files = uploadedFiles.map((fileKey: any, index: number) => {
+          const userDescription =
+            caseData.files && caseData.files[index]
+              ? caseData.files[index].description
+              : "";
+
+          return {
+            fileKey: fileKey,
+            description: userDescription || "No description provided",
+          };
+        });
       }
 
       const updatedCase = await caseServices.updateCaseById(caseId, caseData);
