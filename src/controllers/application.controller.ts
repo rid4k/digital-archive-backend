@@ -327,7 +327,23 @@ const application = {
         return;
       }
 
-      res.status(200).json(application);
+      const filesWithSignedUrls = await Promise.all(
+        application.files.map(async (file) => ({
+          _id: file._id,
+          fileKey: file.fileKey,
+          description: file.description,
+          signedUrl: file.fileKey
+            ? await helpers.generateSignedUrl(file.fileKey)
+            : "",
+        }))
+      );
+
+      const signedApplication = {
+        ...application.toObject(), // Eğer Mongoose modeli ise düz objeye çevirin
+        files: filesWithSignedUrls, // Güncellenmiş dosyalar
+      };
+
+      res.status(200).json(signedApplication);
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
