@@ -87,7 +87,9 @@ const auth = {
         maxAge: 24 * 60 * 60 * 1000, // 24h
       });
 
-      res.status(200).json({ message: "Login successful" });
+      res
+        .status(200)
+        .json({ message: "Login successful", userType: user.userType });
     } catch (error) {
       console.log(error);
       res.sendStatus(400);
