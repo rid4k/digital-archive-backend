@@ -205,6 +205,15 @@ const cases = {
             description: userDescription || "No description provided",
           };
         });
+      } else {
+        const existsCaseData = await caseServices.getCaseById(caseId);
+
+        if (existsCaseData && existsCaseData.files) {
+          caseData.files = existsCaseData.files.map((file: any) => ({
+            fileKey: file.fileKey || "", // Varsayılan değer
+            description: file.description || "", // Varsayılan değer
+          }));
+        }
       }
 
       const updatedCase = await caseServices.updateCaseById(caseId, caseData);
